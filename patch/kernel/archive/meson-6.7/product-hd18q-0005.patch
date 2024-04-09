@@ -1,0 +1,40 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: ElectroBoy404NotFound <electroboy404notfound@gmail.com>
+Date: Mon, 8 Apr 2024 16:57:58 +0000
+Subject: Patching kernel meson files
+ arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
+
+Signed-off-by: ElectroBoy404NotFound <electroboy404notfound@gmail.com>
+---
+ arch/arm/boot/dts/amlogic/meson8b-hd18q.dts | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts b/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
+index f9d16e0e8fdd..2f84cf481a6d 100644
+--- a/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
++++ b/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
+@@ -371,17 +371,19 @@ &sdhc {
+     //  bus-width = <8>;
+      ocr-avail = <0x200000>;
+      max-frequency = <50000000>;
+      max-req-size = <0x20000>;
+      min-frequency = <300000>;
+-    //  cap-mmc-highspeed;
++     cap-mmc-highspeed;
+      mmc-hs200-3_3v;
+  
+      mmc-pwrseq = <&emmc_pwrseq>;
+      vmmc-supply = <&vcc_3v3>;
+      card-type = <1>;
+-     // vqmmc-supply = <&vcc_3v3>;
++     vqmmc-supply = <&vcc_3v3>;
++
++     caps = "MMC_CAP_4_BIT_DATA","MMC_CAP_MMC_HIGHSPEED","MMC_CAP_SD_HIGHSPEED", "MMC_CAP_NONREMOVABLE","MMC_CAP_ERASE", "MMC_CAP_HW_RESET";
+  };
+  
+  &sdio {
+      status = "okay";
+  
+-- 
+Created with Armbian build tools https://github.com/armbian/build
+

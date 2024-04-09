@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: ElectroBoy404NotFound <electroboy404notfound@gmail.com>
+Date: Tue, 9 Apr 2024 03:17:23 +0000
+Subject: Patching kernel meson files
+ arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
+
+Signed-off-by: ElectroBoy404NotFound <electroboy404notfound@gmail.com>
+---
+ arch/arm/boot/dts/amlogic/meson8b-hd18q.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts b/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
+index 54a4bc63a761..8aad15c1be26 100644
+--- a/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
++++ b/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
+@@ -409,11 +409,11 @@ emmc {
+          f_max = <50000000>;
+          max_req_size = <0x20000>;          /**128KB*/
+          gpio_dat3 = "BOOT_3";
+          card_type = <1>; /* 0:unknown, 1:mmc card(include eMMC), 2:sd card(include tSD), 3:sdio device(ie:sdio-wifi), 4:SD combo (IO+mem) card, 5:NON sdio device(means sd/mmc card), other:reserved */
+      };
+-}   
++}; 
+     
+ 
+  &sdio {
+      status = "okay";
+  
+-- 
+Created with Armbian build tools https://github.com/armbian/build
+

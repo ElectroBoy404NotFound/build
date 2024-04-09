@@ -1,0 +1,178 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: ElectroBoy404NotFound <electroboy404notfound@gmail.com>
+Date: Tue, 9 Apr 2024 03:09:39 +0000
+Subject: Patching kernel meson files
+ arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
+ arch/arm/boot/dts/amlogic/meson8b.dtsi
+
+Signed-off-by: ElectroBoy404NotFound <electroboy404notfound@gmail.com>
+---
+ arch/arm/boot/dts/amlogic/meson8b-hd18q.dts | 46 ++++++-
+ arch/arm/boot/dts/amlogic/meson8b.dtsi      | 64 ++++++++++
+ 2 files changed, 109 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts b/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
+index 2f84cf481a6d..54a4bc63a761 100644
+--- a/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
++++ b/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
+@@ -14,11 +14,11 @@ / {
+      compatible = "amlogic,meson8b";
+  
+      aliases {
+          serial0 = &uart_AO;
+          mmc0 = &sd_card_slot;
+-         mmc1 = &sdhc;
++         mmc1 = &emmc;
+      };
+  
+      chosen {
+          stdout-path = "serial0:115200n8";
+      };
+@@ -382,10 +382,40 @@ &sdhc {
+      vqmmc-supply = <&vcc_3v3>;
+ 
+      caps = "MMC_CAP_4_BIT_DATA","MMC_CAP_MMC_HIGHSPEED","MMC_CAP_SD_HIGHSPEED", "MMC_CAP_NONREMOVABLE","MMC_CAP_ERASE", "MMC_CAP_HW_RESET";
+  };
+  
++ &sdhc {
++     compatible = "amlogic,aml_sdhc";
++     dev_name = "aml_sdhc.0";
++     status = "okay";
++     reg = <0xc1108e00 0x3c>;
++     pinctrl-names = "sdhc_sd_clk_cmd_pins", "sdhc_sd_all_pins", "sdhc_emmc_clk_cmd_pins", "sdhc_emmc_all_pins", "sdhc_sdio_clk_cmd_pins", "sdhc_sdio_all_pins";
++     pinctrl-0 = <&sdhc_sd_clk_cmd_pins>;
++     pinctrl-1 = <&sdhc_sd_all_pins>;
++     pinctrl-2 = <&sdhc_emmc_clk_cmd_pins>;
++     pinctrl-3 = <&sdhc_emmc_all_pins>;
++     pinctrl-4 = <&sdhc_sdio_clk_cmd_pins>;
++     pinctrl-5 = <&sdhc_sdio_all_pins>;
++     //pinctrl-6 = <&sd_1bit_pins>;
++
++     emmc {
++         status = "okay";
++         port = <5>;          /**0:sdio_a, 1:sdio_b, 2:sdio_c, 3:sdhc_a, 4:sdhc_b, 5:sdhc_c */
++         pinname = "emmc";
++         ocr_avail = <0x200000>;          /**VDD voltage 3.3 ~ 3.4 */
++         caps = "MMC_CAP_8_BIT_DATA","MMC_CAP_MMC_HIGHSPEED","MMC_CAP_SD_HIGHSPEED", "MMC_CAP_NONREMOVABLE","MMC_CAP_ERASE", "MMC_CAP_HW_RESET"; // MMC_CAP_NEEDS_POLL -- for detect, MMC_CAP_NONREMOVABLE -- for eMMC/TSD
++         //caps2 = "MMC_CAP2_HS200_1_8V_SDR";
++         f_min = <300000>;
++         f_max = <50000000>;
++         max_req_size = <0x20000>;          /**128KB*/
++         gpio_dat3 = "BOOT_3";
++         card_type = <1>; /* 0:unknown, 1:mmc card(include eMMC), 2:sd card(include tSD), 3:sdio device(ie:sdio-wifi), 4:SD combo (IO+mem) card, 5:NON sdio device(means sd/mmc card), other:reserved */
++     };
++}   
++    
++
+  &sdio {
+      status = "okay";
+  
+      pinctrl-0 = <&sd_b_pins>;
+      pinctrl-names = "default";
+@@ -405,10 +435,24 @@ sd_card_slot: slot@1 {
+          cd-gpios = <&gpio CARD_6 GPIO_ACTIVE_LOW>;
+  
+          vmmc-supply = <&vcc_3v3>;
+          // vqmmc-supply = <&vcc_3v3>;
+      };
++
++//      emmc {
++//         status = "ok";
++// //            port = <2>;          /**0:sdio_a, 1:sdio_b, 2:sdio_c, 3:sdhc_a, 4:sdhc_b, 5:sdhc_c */
++// //            pinname = "emmc";
++// //            ocr_avail = <0x200000>;          /**VDD voltage 3.3 ~ 3.4 */
++// //            caps = "MMC_CAP_4_BIT_DATA","MMC_CAP_MMC_HIGHSPEED","MMC_CAP_SD_HIGHSPEED", "MMC_CAP_NONREMOVABLE","MMC_CAP_ERASE", "MMC_CAP_HW_RESET"; // MMC_CAP_NEEDS_POLL -- for detect, MMC_CAP_NONREMOVABLE -- for eMMC/TSD
++// //            f_min = <300000>;
++// //            f_max = <50000000>;
++// //            f_max_w = <50000000>;
++// //            max_req_size = <0x20000>;          /**128KB*/
++// //            gpio_dat3 = "BOOT_3";
++// //            card_type = <1>; /* 0:unknown, 1:mmc card(include eMMC), 2:sd card(include tSD), 3:sdio device(ie:sdio-wifi), 4:SD combo (IO+mem) card, 5:NON sdio device(means sd/mmc card), other:reserved */
++//      }
+  };
+  
+  &ethmac {
+      status = "okay";
+  
+diff --git a/arch/arm/boot/dts/amlogic/meson8b.dtsi b/arch/arm/boot/dts/amlogic/meson8b.dtsi
+index da9216eee98b..8ed5be186ae1 100644
+--- a/arch/arm/boot/dts/amlogic/meson8b.dtsi
++++ b/arch/arm/boot/dts/amlogic/meson8b.dtsi
+@@ -672,10 +672,74 @@ mux {
+ 				       "uart_rts_b0";
+ 				function = "uart_b";
+ 				bias-disable;
+ 			};
+ 		};
++
++		sdhc_sd_clk_cmd_pins:sdhc_sd_clk_cmd_pins{
++			amlogic,setmask=<2 0x00000030>;         /*sdhc b*/
++			amlogic,clrmask=<5 0x00007c00           /*sdhc a*/
++			                     4 0x7c000000        /*sdhc c*/
++			                     2 0x0000fc00        /*sdio b*/
++			                     8 0x00000600>;      /*UART*/
++			amlogic,pins = "CARD_2","CARD_3"; /* CARD_2:CLK, CARD_3:CMD */
++			amlogic,enable-output=<1>; /* 0:output, 1:input */
++			amlogic,pullup=<1>;
++			amlogic,pullupen=<1>;
++		}
++		sdhc_sd_all_pins:sdhc_sd_all_pins{
++			amlogic,setmask=<2 0x000000f0>;         /*sdhc b*/
++			amlogic,clrmask=<5 0x00007c00           /*sdhc a*/
++			                    4 0x7c000000        /*sdhc c*/
++			                    2 0x0000fc00        /*sdio b*/
++			                    8 0x00000600>;      /*UART*/
++			amlogic,pins="CARD_0","CARD_1","CARD_2","CARD_3","CARD_4","CARD_5";
++			amlogic,enable-output=<1>; /* 0:output, 1:input */
++			amlogic,pullup=<1>;
++			amlogic,pullupen=<1>;
++		};
++		sdhc_emmc_clk_cmd_pins:sdhc_emmc_clk_cmd_pins{
++		    amlogic,setmask=<7 0xc0000>;         /*bit[18-19] */
++		    amlogic,clrmask=<2 0x04c000f0           /*sdhc b & nand*/
++		                        5 0x00007c00        /*sdhc a*/
++		                        6 0xff000000>;        /*sdio c*/
++		    amlogic,pins = "BOOT_8","BOOT_10"; /** BOOT_10:CMD, BOOT_8:CLK */
++		    amlogic,enable-output=<1>; /** 0:output, 1:input */
++		    amlogic,pullup=<1>;
++		    amlogic,pullupen=<1>;
++		};
++		sdhc_emmc_all_pins:sdhc_emmc_all_pins{
++		    amlogic,setmask=<4 0x70000000
++		                     7 0xc0000>;         /*sdhc c*/
++		    amlogic,clrmask=<2 0x04c000f0           /*sdhc b & nand*/
++		                        5 0x00007c00        /*sdhc a*/
++		                        6 0xff000000>;        /*sdio c*/
++		    amlogic,pins = "BOOT_0","BOOT_1","BOOT_2","BOOT_3","BOOT_4","BOOT_5","BOOT_6","BOOT_7","BOOT_8","BOOT_10";
++		    amlogic,enable-output=<1>; /** 0:output, 1:input */
++		    amlogic,pullup=<1>;
++		    amlogic,pullupen=<1>;
++		};
++		sdhc_sdio_clk_cmd_pins:sdhc_sdio_clk_cmd_pins{
++		    amlogic,setmask=<5 0x00000c00>;         /*sdhc a bit[10-11] */
++		    amlogic,clrmask=<2 0x058000f0           /*sdhc b*/
++		                        4 0x7c000000        /*sdhc c */
++		                        8 0x0000003f>;        /*sdio a*/
++		    amlogic,pins = "GPIOX_8","GPIOX_9"; /** BOOT_16:CMD, BOOT_17:CLK */
++		    amlogic,enable-output=<1>; /** 0:output, 1:input */
++		    amlogic,pullup=<1>;
++		    amlogic,pullupen=<1>;
++		};	
++		sdhc_sdio_all_pins:sdhc_sdio_all_pins{
++		    amlogic,setmask=<5 0x00006c00>;         /*sdhc a*/
++		    amlogic,clrmask=<2 0x058000f0           /*sdhc b*/
++		                        4 0x7c000000        /*sdhc c */
++		                        8 0x0000003f>;        /*sdio a*/
++		    amlogic,pins = "GPIOX_0","GPIOX_1","GPIOX_2","GPIOX_3","GPIOX_8","GPIOX_9";
++		    amlogic,enable-output=<1>; /** 0:output, 1:input */
++		    amlogic,pullup=<1>;
++		    amlogic,pullupen=<1>;
++		};					
+ 	};
+ };
+ 
+ &ahb_sram {
+ 	ao_arc_sram: ao-arc-sram@0 {
+-- 
+Created with Armbian build tools https://github.com/armbian/build
+

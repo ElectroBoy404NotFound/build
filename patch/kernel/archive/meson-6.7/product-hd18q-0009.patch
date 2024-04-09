@@ -1,0 +1,87 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: ElectroBoy404NotFound <electroboy404notfound@gmail.com>
+Date: Tue, 9 Apr 2024 03:25:05 +0000
+Subject: Patching kernel meson files
+ arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
+
+Signed-off-by: ElectroBoy404NotFound <electroboy404notfound@gmail.com>
+---
+ arch/arm/boot/dts/amlogic/meson8b-hd18q.dts | 46 +++++-----
+ 1 file changed, 23 insertions(+), 23 deletions(-)
+
+diff --git a/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts b/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
+index 8aad15c1be26..70ce33635079 100644
+--- a/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
++++ b/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
+@@ -358,33 +358,33 @@ &gpio_ao {
+          /* 14 */ "GPIO_BSD_EN",
+          /* 15 */ "GPIO_TEST_N";
+  };
+  
+  // eMMC
+- &sdhc {
+-     status = "okay";
+- 
+-     port = <5>;
+-     pinctrl-0 = <&sdxc_c_pins>;
+-     pinctrl-names = "default";
+- 
+-     non-removable;
+-    //  bus-width = <8>;
+-     ocr-avail = <0x200000>;
+-     max-frequency = <50000000>;
+-     max-req-size = <0x20000>;
+-     min-frequency = <300000>;
+-     cap-mmc-highspeed;
+-     mmc-hs200-3_3v;
+- 
+-     mmc-pwrseq = <&emmc_pwrseq>;
+-     vmmc-supply = <&vcc_3v3>;
+-     card-type = <1>;
+-     vqmmc-supply = <&vcc_3v3>;
++//  &sdhc {
++//      status = "okay";
++ 
++//      port = <5>;
++//      pinctrl-0 = <&sdxc_c_pins>;
++//      pinctrl-names = "default";
++ 
++//      non-removable;
++//     //  bus-width = <8>;
++//      ocr-avail = <0x200000>;
++//      max-frequency = <50000000>;
++//      max-req-size = <0x20000>;
++//      min-frequency = <300000>;
++//      cap-mmc-highspeed;
++//      mmc-hs200-3_3v;
++ 
++//      mmc-pwrseq = <&emmc_pwrseq>;
++//      vmmc-supply = <&vcc_3v3>;
++//      card-type = <1>;
++//      vqmmc-supply = <&vcc_3v3>;
+ 
+-     caps = "MMC_CAP_4_BIT_DATA","MMC_CAP_MMC_HIGHSPEED","MMC_CAP_SD_HIGHSPEED", "MMC_CAP_NONREMOVABLE","MMC_CAP_ERASE", "MMC_CAP_HW_RESET";
+- };
++//      caps = "MMC_CAP_4_BIT_DATA","MMC_CAP_MMC_HIGHSPEED","MMC_CAP_SD_HIGHSPEED", "MMC_CAP_NONREMOVABLE","MMC_CAP_ERASE", "MMC_CAP_HW_RESET";
++//  };
+  
+  &sdhc {
+      compatible = "amlogic,aml_sdhc";
+      dev_name = "aml_sdhc.0";
+      status = "okay";
+@@ -396,11 +396,11 @@ &sdhc {
+      pinctrl-3 = <&sdhc_emmc_all_pins>;
+      pinctrl-4 = <&sdhc_sdio_clk_cmd_pins>;
+      pinctrl-5 = <&sdhc_sdio_all_pins>;
+      //pinctrl-6 = <&sd_1bit_pins>;
+ 
+-     emmc {
++     emmc: emmc {
+          status = "okay";
+          port = <5>;          /**0:sdio_a, 1:sdio_b, 2:sdio_c, 3:sdhc_a, 4:sdhc_b, 5:sdhc_c */
+          pinname = "emmc";
+          ocr_avail = <0x200000>;          /**VDD voltage 3.3 ~ 3.4 */
+          caps = "MMC_CAP_8_BIT_DATA","MMC_CAP_MMC_HIGHSPEED","MMC_CAP_SD_HIGHSPEED", "MMC_CAP_NONREMOVABLE","MMC_CAP_ERASE", "MMC_CAP_HW_RESET"; // MMC_CAP_NEEDS_POLL -- for detect, MMC_CAP_NONREMOVABLE -- for eMMC/TSD
+-- 
+Created with Armbian build tools https://github.com/armbian/build
+

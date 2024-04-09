@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: ElectroBoy404NotFound <electroboy404notfound@gmail.com>
+Date: Mon, 8 Apr 2024 15:58:50 +0000
+Subject: Patching kernel meson files
+ arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
+
+Signed-off-by: ElectroBoy404NotFound <electroboy404notfound@gmail.com>
+---
+ arch/arm/boot/dts/amlogic/meson8b-hd18q.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts b/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
+index 42fe570c0c8b..d3435b4ae0e4 100644
+--- a/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
++++ b/arch/arm/boot/dts/amlogic/meson8b-hd18q.dts
+@@ -368,11 +368,11 @@ &sdhc {
+      pinctrl-names = "default";
+  
+      non-removable;
+      bus-width = <8>;
+      max-frequency = <200000000>;
+-     cap-mmc-highspeed;
++    //  cap-mmc-highspeed;
+      mmc-hs200-3_3v;
+  
+      mmc-pwrseq = <&emmc_pwrseq>;
+      vmmc-supply = <&vcc_3v3>;
+      // vqmmc-supply = <&vcc_3v3>;
+-- 
+Created with Armbian build tools https://github.com/armbian/build
+

@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: ElectroBoy404NotFound <electroboy404notfound@gmail.com>
+Date: Tue, 9 Apr 2024 03:13:38 +0000
+Subject: Patching kernel meson files arch/arm/boot/dts/amlogic/meson8b.dtsi
+
+Signed-off-by: ElectroBoy404NotFound <electroboy404notfound@gmail.com>
+---
+ arch/arm/boot/dts/amlogic/meson8b.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/amlogic/meson8b.dtsi b/arch/arm/boot/dts/amlogic/meson8b.dtsi
+index 8ed5be186ae1..b569b915da45 100644
+--- a/arch/arm/boot/dts/amlogic/meson8b.dtsi
++++ b/arch/arm/boot/dts/amlogic/meson8b.dtsi
+@@ -683,11 +683,11 @@ sdhc_sd_clk_cmd_pins:sdhc_sd_clk_cmd_pins{
+ 			                     8 0x00000600>;      /*UART*/
+ 			amlogic,pins = "CARD_2","CARD_3"; /* CARD_2:CLK, CARD_3:CMD */
+ 			amlogic,enable-output=<1>; /* 0:output, 1:input */
+ 			amlogic,pullup=<1>;
+ 			amlogic,pullupen=<1>;
+-		}
++		};
+ 		sdhc_sd_all_pins:sdhc_sd_all_pins{
+ 			amlogic,setmask=<2 0x000000f0>;         /*sdhc b*/
+ 			amlogic,clrmask=<5 0x00007c00           /*sdhc a*/
+ 			                    4 0x7c000000        /*sdhc c*/
+ 			                    2 0x0000fc00        /*sdio b*/
+-- 
+Created with Armbian build tools https://github.com/armbian/build
+
